@@ -1,2 +1,2 @@
-# clickhouse-service
+# clickhouse
 clickhouse-service
