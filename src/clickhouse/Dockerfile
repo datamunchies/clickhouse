@@ -21,6 +21,7 @@ RUN sed -i "s|http://archive.ubuntu.com|${apt_archive}|g" /etc/apt/sources.list 
         nano \
         lsof \
         gosu \
+        curl \
     && apt-get clean
 
 ARG REPO_CHANNEL="stable"
@@ -100,7 +101,12 @@ RUN mkdir /docker-entrypoint-initdb.d
 
 COPY docker_related_config.xml /etc/clickhouse-server/config.d/
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY readinessProbe.sh /readinessProbe.sh
+COPY livenessProbe.sh /livenessProbe.sh
+
+RUN chmod +x /entrypoint.sh && \
+    chmod +x /readinessProbe.sh && \
+    chmod +x /livenessProbe.sh
 
 EXPOSE 9000 8123 9009
 VOLUME /var/lib/clickhouse /data
